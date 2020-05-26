@@ -161,7 +161,11 @@ for block_in in shapeless_in:
                                 else "1"))
             f.close()
 
-'''for block_in in shaped_in:
+'''
+    Shaped recipes at the moment assume the resulting block uses regular colored variants.
+    Impacted recipes will leave an empty string as the dye ingredient.
+'''
+for block_in in shaped_in:
     blocks_out = shaped_in[block_in]
     if(block_in[0] == "&"):
         for color in colors:
@@ -174,10 +178,8 @@ for block_in in shapeless_in:
                 output = (final_block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
                 f = open("output/shaped_%s.json" % output, "w")
                 f.write(shaped_template.replace("$item", final_block_in)
-                                       .replace("$result", each)
-                                       .replace("$count", "2"
-                                            if any(double in each for double in ["slab", "stairs", "pillar"]) 
-                                            else "1"))
+                                        .replace("$result", each)
+                                        .replace("$dye", "minecraft:%s" % colors[color]))
                 f.close()
     else:
         if(":" not in block_in):
@@ -188,9 +190,6 @@ for block_in in shapeless_in:
             output = (block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
             f = open("output/shaped_%s.json" % output, "w")
             f.write(shaped_template.replace("$item", block_in)
-                                   .replace("$result", each)
-                                   .replace("$count", "2"
-                                        if any(double in each for double in ["slab", "stairs", "pillar"])
-                                        else "1"))
+                                        .replace("$result", each)
+                                        .replace("$dye", ""))
             f.close()
-'''
