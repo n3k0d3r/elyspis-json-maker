@@ -88,13 +88,10 @@ for line in f:
                 shaped_in[block_in] = blocks_out
 f.close()
 
-# Initialize final dicts
-stonecutting = {}
-shapeless = {}
-
 '''
-    Break out stonecutter and shapeless block colors into their final dicts.
-    Shaped dicts is keeping its formatting for dye conversion.
+    Break out stonecutter, shapeless, and shaped into their colored variants, write to file
+    I noticed I could consolidate these into a single loop, but it is late and I am lazy.
+    Maybe another day.
 '''
 for block_in in stonecutting_in:
     blocks_out = stonecutting_in[block_in]
@@ -128,3 +125,72 @@ for block_in in stonecutting_in:
                                             if any(double in each for double in ["slab", "stairs", "pillar"])
                                             else "1"))
             f.close()
+
+for block_in in shapeless_in:
+    blocks_out = shapeless_in[block_in]
+    if(block_in[0] == "&"):
+        for color in colors:
+            final_block_in = block_in[1:].replace("@color", color)
+            if(":" not in final_block_in):
+                final_block_in = "elypsis:%s" % final_block_in
+            for each in blocks_out:
+                if(":" not in each):
+                    each = "elypsis:%s" % each.replace("@color", color)
+                output = (final_block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
+                f = open("output/shapeless_%s.json" % output, "w")
+                template = shapeless_slab_template if any(double in final_block_in for double in ["slab", "stairs", "pillar"]) else shapeless_template
+                f.write(template.replace("$item", final_block_in)
+                                .replace("$result", each)
+                                .replace("$count", "2" 
+                                    if any(double in each for double in ["slab", "stairs", "pillar"]) 
+                                    else "1"))
+                f.close()
+    else:
+        if(":" not in block_in):
+            block_in = "elypsis:%s" % block_in
+        for each in blocks_out:
+            if(":" not in each):
+                each = "elypsis:%s" % each
+            output = (block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
+            f = open("output/shapeless_%s.json" % output, "w")
+            template = shapeless_slab_template if any(double in block_in for double in ["slab", "stairs", "pillar"]) else shapeless_template
+            f.write(template.replace("$item", block_in)
+                            .replace("$result", each)
+                            .replace("$count", "2"
+                                if any(double in each for double in ["slab", "stairs", "pillar"])
+                                else "1"))
+            f.close()
+
+'''for block_in in shaped_in:
+    blocks_out = shaped_in[block_in]
+    if(block_in[0] == "&"):
+        for color in colors:
+            final_block_in = block_in[1:].replace("@color", color)
+            if(":" not in final_block_in):
+                final_block_in = "elypsis:%s" % final_block_in
+            for each in blocks_out:
+                if(":" not in each):
+                    each = "elypsis:%s" % each.replace("@color", color)
+                output = (final_block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
+                f = open("output/shaped_%s.json" % output, "w")
+                f.write(shaped_template.replace("$item", final_block_in)
+                                       .replace("$result", each)
+                                       .replace("$count", "2"
+                                            if any(double in each for double in ["slab", "stairs", "pillar"]) 
+                                            else "1"))
+                f.close()
+    else:
+        if(":" not in block_in):
+            block_in = "elypsis:%s" % block_in
+        for each in blocks_out:
+            if(":" not in each):
+                each = "elypsis:%s" % each
+            output = (block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
+            f = open("output/shaped_%s.json" % output, "w")
+            f.write(shaped_template.replace("$item", block_in)
+                                   .replace("$result", each)
+                                   .replace("$count", "2"
+                                        if any(double in each for double in ["slab", "stairs", "pillar"])
+                                        else "1"))
+            f.close()
+'''
