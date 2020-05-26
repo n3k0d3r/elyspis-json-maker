@@ -24,11 +24,11 @@ os.makedirs(output_dir)
 
 # Open and read in file given
 colors = {}
-stonecutting = {}
-shapeless = {}
-shaped = {}
+stonecutting_in = {}
+shapeless_in = {}
+shaped_in = {}
 setting = ""
-d_char = ":"
+d_char = "~"
 sub_d_char = ";"
 print("Opening file '%s'" % filename)
 f = open(filename, "r")
@@ -40,16 +40,21 @@ for line in f:
             color = line[:line.find(d_char)].strip()
             dye = line[line.find(d_char) + 1:].strip()
             colors[color] = dye
-        elif(setting == "minecraft:stonecutting"):
+        else:
             block_in = line[:line.find(d_char)].strip()
-            line_out = line[line.find(d_char) + 1:].strip()
-            blocks_out = [each.strip() for each in line_out.split(sub_d_char)]
-            stonecutting[block_in] = blocks_out
-        #elif(setting == "minecraft:crafting_shapeless"):
-        #elif(setting == "minecraft:crafting_shaped"):
+            blocks_out = line[line.find(d_char) + 1:].strip()
+            print(blocks_out)
+            if(setting == "minecraft:stonecutting"):
+                stonecutting_in[block_in] = blocks_out
+            elif(setting == "minecraft:crafting_shapeless"):
+                shapeless_in[block_in] = blocks_out
+            elif(setting == "minecraft:crafting_shaped"):
+                shaped_in[block_in] = blocks_out
 f.close()
-print(stonecutting)
 
+#for block_in in stonecutting_in:
+#    print(block_in, ", ", blocks_out)
+#blocks_out = [each.strip() for each in line_out.split(sub_d_char)]
 # Strip whitespace, pull colored variants and add to list in each color
 '''config = [each.strip() for each in config]
 variants = [each for each in config if re.search("@color", each)]
