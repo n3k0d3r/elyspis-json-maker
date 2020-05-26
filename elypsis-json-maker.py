@@ -88,7 +88,10 @@ for block_in in stonecutting_in:
             final_block_in = block_in[1:].replace("@color", color)
             shutil.copyfile(
                 "stonecutter-template.json",
-                "output/stonecutter_%s.json" % final_block_in.encode("utf-8", "ignore").decode().lower()
+                "output/stonecutter_%s.json" % final_block_in.replace(":", "_")
+                                                             .encode("utf-8", "ignore")
+                                                             .decode()
+                                                             .lower()
             )
             final_blocks_out = [each.replace("@color", each) for each in blocks_out]
             stonecutting[final_block_in] = final_blocks_out
