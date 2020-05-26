@@ -40,8 +40,15 @@ for line in f:
             color = line[:line.find(d_char)].strip()
             dye = line[line.find(d_char) + 1:].strip()
             colors[color] = dye
+        elif(setting == "minecraft:stonecutting"):
+            block_in = line[:line.find(d_char)].strip()
+            line_out = line[line.find(d_char) + 1:].strip()
+            blocks_out = [each.strip() for each in line_out.split(sub_d_char)]
+            stonecutting[block_in] = blocks_out
+        #elif(setting == "minecraft:crafting_shapeless"):
+        #elif(setting == "minecraft:crafting_shaped"):
 f.close()
-print(colors)
+print(stonecutting)
 
 # Strip whitespace, pull colored variants and add to list in each color
 '''config = [each.strip() for each in config]
