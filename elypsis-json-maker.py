@@ -10,11 +10,19 @@ if(len(sys.argv) != 2):
     print("Error, requires 1 argument")
     exit()
 
-# Check if file exists
+# Check if given file and templates exist
 filename = sys.argv[1].strip()
 if(not os.path.exists(filename)):
     print("File '%s' does not exist" % filename)
     exit()
+for template in [
+    "stonecutter-template.json",
+    "shapeless-template.json",
+    "shapeless-slab-template.json",
+    "shaped-template.json"]:
+    if(not os.path.exists(template)):
+        print("Template '%s' does not exist" % template)
+        exit()
 
 # Output directory
 output_dir = "output"
@@ -74,6 +82,10 @@ for block_in in stonecutting_in:
     if(block_in[0] == "&"):
         for color in colors:
             final_block_in = block_in[1:].replace("@color", color)
+            shutil.copyfile(
+                "stonecutter-template.json",
+                "output/stonecutter-%s.json" % final_block_in.encode("utf-8", "ignore").decode()
+            )
             final_blocks_out = [each.replace("@color", each) for each in blocks_out]
             stonecutting[final_block_in] = final_blocks_out
     else:
