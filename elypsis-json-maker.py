@@ -4,6 +4,7 @@ import sys
 import os.path
 import shutil
 import re
+import fileinput
 
 # Check for only 1 argument
 if(len(sys.argv) != 2):
@@ -23,6 +24,20 @@ for template in [
     if(not os.path.exists(template)):
         print("Template '%s' does not exist" % template)
         exit()
+
+# Get template data
+f = open("stonecutter-template.json", "r")
+stonecutter_template = f.read()
+f.close()
+f = open("shapeless-template.json", "r")
+shapeless_template = f.read()
+f.close()
+f = open("shapeless-slab-template.json", "r")
+shapeless_slab_template = f.read()
+f.close()
+f = open("shaped-template.json", "r")
+shaped_template = f.read()
+f.close()
 
 # Output directory
 output_dir = "output"
@@ -86,31 +101,30 @@ for block_in in stonecutting_in:
     if(block_in[0] == "&"):
         for color in colors:
             final_block_in = block_in[1:].replace("@color", color)
-            shutil.copyfile(
-                "stonecutter-template.json",
-                "output/stonecutter_%s.json" % final_block_in.replace(":", "_")
-                                                             .encode("utf-8", "ignore")
-                                                             .decode()
-                                                             .lower()
-            )
-            final_blocks_out = [each.replace("@color", each) for each in blocks_out]
-            stonecutting[final_block_in] = final_blocks_out
+            if(":" not in final_block_in):
+                final_block_in = "elypsis:%s" % final_block_in
+            for each in blocks_out:
+                if(":" not in each):
+                    each = "elypsis:%s" % each.replace("@color", color)
+                output = (final_block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
+                f = open("output/stonecutter_%s.json" % output, "w")
+                f.write(stonecutter_template.replace("$item", final_block_in)
+                                            .replace("$result", each)
+                                            .replace("$count", "2" 
+                                                if any(double in each for double in ["slab", "stairs", "pillar"]) 
+                                                else "1"))
+                f.close()
     else:
-        shutil.copyfile(
-            "stonecutter-template.json",
-            "output/stonecutter_%s.json" % block_in.replace(":", "_")
-                                                   .encode("utf-8", "ignore")
-                                                   .decode()
-                                                   .lower()
-        )
-        stonecutting[block_in] = blocks_out
-        
-for block_in in shapeless_in:
-    blocks_out = shapeless_in[block_in]
-    if(block_in[0] == "&"):
-        for color in colors:
-            final_block_in = block_in[1:].replace("@color", color)
-            final_blocks_out = [each.replace("@color", each) for each in blocks_out]
-            shapeless[final_block_in] = final_blocks_out
-    else:
-        shapeless[block_in] = blocks_out
+        if(":" not in block_in):
+            block_in = "elypsis:%s" % block_in
+        for each in blocks_out:
+            if(":" not in each):
+                each = "elypsis:%s" % each
+            output = (block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
+            f = open("output/stonecutter_%s.json" % output, "w")
+            f.write(stonecutter_template.replace("$item", block_in)
+                                        .replace("$result", each)
+                                        .replace("$count", "2"
+                                            if any(double in each for double in ["slab", "stairs", "pillar"])
+                                            else "1"))
+            f.close()
