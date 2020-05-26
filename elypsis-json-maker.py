@@ -88,17 +88,3 @@ for block_in in shapeless_in:
             shapeless[final_block_in] = final_blocks_out
     else:
         shapeless[block_in] = blocks_out
-
-print(stonecutting)
-#blocks_out = [each.strip() for each in line_out.split(sub_d_char)]
-# Strip whitespace, pull colored variants and add to list in each color
-'''config = [each.strip() for each in config]
-variants = [each for each in config if re.search("@color", each)]
-config = [each for each in config if each not in variants]
-for each in variants:
-    for color in colors:
-        config.append(each.replace("@color", color))
-
-
-print(config)
-print(variants)'''
