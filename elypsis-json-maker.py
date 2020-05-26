@@ -28,7 +28,11 @@ for template in [
 output_dir = "output"
 if(os.path.exists(output_dir)):
     shutil.rmtree(output_dir)
-os.makedirs(output_dir)
+try:
+    os.makedirs(output_dir)
+except PermissionError:
+    print("Windows 10 permissions are dumb. Run the script again lol")
+    exit()
 
 # Initialize dicts, state, and delimiter literals
 colors = {}
@@ -84,7 +88,7 @@ for block_in in stonecutting_in:
             final_block_in = block_in[1:].replace("@color", color)
             shutil.copyfile(
                 "stonecutter-template.json",
-                "output/stonecutter-%s.json" % final_block_in.encode("utf-8", "ignore").decode()
+                "output/stonecutter_%s.json" % final_block_in.encode("utf-8", "ignore").decode().lower()
             )
             final_blocks_out = [each.replace("@color", each) for each in blocks_out]
             stonecutting[final_block_in] = final_blocks_out
