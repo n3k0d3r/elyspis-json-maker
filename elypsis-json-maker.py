@@ -104,7 +104,7 @@ for block_in in stonecutting_in:
                 if(":" not in each):
                     each = "elypsis:%s" % each.replace("@color", color)
                 output = (final_block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
-                f = open("output/stonecutter_%s.json" % output, "w")
+                f = open("%s/stonecutter_%s.json" % (output_dir, output), "w")
                 f.write(stonecutter_template.replace("$item", final_block_in)
                                             .replace("$result", each)
                                             .replace("$count", "2" 
@@ -118,7 +118,7 @@ for block_in in stonecutting_in:
             if(":" not in each):
                 each = "elypsis:%s" % each
             output = (block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
-            f = open("output/stonecutter_%s.json" % output, "w")
+            f = open("%s/stonecutter_%s.json" % (output_dir, output), "w")
             f.write(stonecutter_template.replace("$item", block_in)
                                         .replace("$result", each)
                                         .replace("$count", "2"
@@ -137,7 +137,7 @@ for block_in in shapeless_in:
                 if(":" not in each):
                     each = "elypsis:%s" % each.replace("@color", color)
                 output = (final_block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
-                f = open("output/shapeless_%s.json" % output, "w")
+                f = open("%s/shapeless_%s.json" % (output_dir, output), "w")
                 template = shapeless_slab_template if any(double in final_block_in for double in ["slab", "stairs", "pillar"]) else shapeless_template
                 f.write(template.replace("$item", final_block_in)
                                 .replace("$result", each)
@@ -152,7 +152,7 @@ for block_in in shapeless_in:
             if(":" not in each):
                 each = "elypsis:%s" % each
             output = (block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
-            f = open("output/shapeless_%s.json" % output, "w")
+            f = open("%s/shapeless_%s.json" % (output_dir, output), "w")
             template = shapeless_slab_template if any(double in block_in for double in ["slab", "stairs", "pillar"]) else shapeless_template
             f.write(template.replace("$item", block_in)
                             .replace("$result", each)
@@ -176,7 +176,7 @@ for block_in in shaped_in:
                 if(":" not in each):
                     each = "elypsis:%s" % each.replace("@color", color)
                 output = (final_block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
-                f = open("output/shaped_%s.json" % output, "w")
+                f = open("%s/shaped_%s.json" % (output_dir, output), "w")
                 f.write(shaped_template.replace("$item", final_block_in)
                                         .replace("$result", each)
                                         .replace("$dye", "minecraft:%s" % colors[color]))
@@ -188,7 +188,7 @@ for block_in in shaped_in:
             if(":" not in each):
                 each = "elypsis:%s" % each
             output = (block_in+"_to_"+each).replace(":", "_").encode("utf-8", "ignore").decode().lower()
-            f = open("output/shaped_%s.json" % output, "w")
+            f = open("%s/shaped_%s.json" % (output_dir, output), "w")
             f.write(shaped_template.replace("$item", block_in)
                                         .replace("$result", each)
                                         .replace("$dye", ""))
